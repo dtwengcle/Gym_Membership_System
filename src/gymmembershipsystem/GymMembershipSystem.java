@@ -1,4 +1,3 @@
-
 package gymmembershipsystem;
 
 import java.util.Scanner;
@@ -16,8 +15,9 @@ public class GymMembershipSystem {
             System.out.println("|   WELCOME TO GYM MEMBERSHIP SYSTEM     |");
             System.out.println("-----------------------------------------");
             System.out.println("1. ADD MEMBERS ");
-            System.out.println("2. VIEW REPORTS");
-            System.out.println("3. EXIT");
+            System.out.println("2. PAYMENTS ");
+            System.out.println("3. VIEW ");
+            System.out.println("4. EXIT");
 
             System.out.print("Enter Action: ");
             int action = sc.nextInt();
@@ -29,10 +29,14 @@ public class GymMembershipSystem {
                     mem.mTransaction();
                     break;
                 case 2:
+                    payments pm = new payments();
+                    pm.pTransaction();
+                    break;
+                case 3:
                     
                     break;
                 
-                case 3:
+                case 4:
                     System.out.print("Exit Selected... Type 'yes' to confirm: ");
                     String resp = sc.nextLine();
                     if (resp.equalsIgnoreCase("yes")) {
@@ -46,6 +50,7 @@ public class GymMembershipSystem {
         } while (running);
 
         sc.close();
-        System.out.println("Exiting Funeral Record Tracker. Goodbye!");
+        System.out.println("Exiting Gym Membership System. Goodbye!");
     }
+    
 }

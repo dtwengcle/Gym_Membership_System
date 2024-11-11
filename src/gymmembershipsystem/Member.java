@@ -26,25 +26,25 @@ public class Member {
 
             System.out.print("Enter selection: ");
             int act = sc.nextInt();
-            sc.nextLine();  
-            Member mem = new Member();
+            sc.nextLine(); 
+
             switch (act) {
                 case 1:
-                    mem.addMembers();
-                    mem.viewMembers();
+                    addMembers();
+                    viewMembers();
                     break;
                 case 2:
-                    mem.viewMembers();
+                    viewMembers();
                     break;
                 case 3:
-                    mem.addMembers();
-                    mem.updateMembers();
-                    mem.addMembers();
+                    viewMembers();
+                    updateMembers();
+                    viewMembers();
                     break;
                 case 4:
-                    mem.addMembers();
-                    mem.updateMembers();
-                    mem.addMembers();
+                    viewMembers();
+                    deleteMembers();
+                    viewMembers();
                     break;
                 
                 case 5:
@@ -60,41 +60,37 @@ public class Member {
 
         } while (response.equalsIgnoreCase("yes"));
     }
+
     public void addMembers() {
         System.out.print("Name: ");
         String name = sc.nextLine();
-        System.out.print("Payment: ");
-        String pay = sc.nextLine();
-        System.out.print("Selected Plan: ");
-        String sp = sc.nextLine();
-        System.out.print("Date and Time: ");
+        System.out.print("Date and Time : ");
         String date = sc.nextLine();
-        System.out.print("Instructor: ");
-        String instru = sc.nextLine();
         System.out.print("Location: ");
         String loc = sc.nextLine();
 
-        String sql = "INSERT INTO tbl_member (m_name, m_payment, m_selectedplan, m_dt, m_instru, m_loc) VALUES (?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO tbl_member (m_name, m_dt, m_loc) VALUES (?, ?, ?)";
         config con = new config();
-        con.addRecord(sql, name, pay, sp, date, instru, loc);
+        con.addRecord(sql, name, date, loc);
         System.out.println("Member added successfully!");
     }
+
     public void viewMembers() {
-        String qry = "SELECT * FROM tbl_membership";
-        String[] columnHeaders = {"ID", "Name", "Payment", "Date and Time", "Selected Plan", "Instructor", "Location"};
-        String[] columnNames = {"m_id", "m_name", "m_payment", "m_dt", "m_selectedplan", "m_instru", "m_loc"};
+        String qry = "SELECT * FROM tbl_member";
+        String[] columnHeaders = {"ID", "Name", "Date and Time", "Location"};
+        String[] columnNames = {"m_id", "m_name", "m_dt", "m_loc"};
         config con = new config();
         con.viewRecords(qry, columnHeaders, columnNames);
     }
-        private void updateMembers() {
-        Scanner sc = new Scanner(System.in);
-        config con = new config();
+
+    public void updateMembers() {
         System.out.print("Enter ID to Update: ");
         int id = sc.nextInt();
         sc.nextLine(); 
         
-        while(con.getSingleValue("SELECT m_id FROM tbl_member WHERE m_id = ?", id) == 0) {
-            System.out.println("Selected ID doesn't exist! ");
+        config con = new config();
+        while (con.getSingleValue("SELECT m_id FROM tbl_member WHERE m_id = ?", id) == 0) {
+            System.out.println("Selected ID doesn't exist!");
             System.out.print("Select member ID Again: ");
             id = sc.nextInt();
             sc.nextLine(); 
@@ -102,39 +98,32 @@ public class Member {
 
         System.out.print("New Name: ");
         String name = sc.nextLine();
-        System.out.print("New Payment: ");
-        String pay = sc.nextLine();
         System.out.print("New Date & Time: ");
         String dt = sc.nextLine();
-        System.out.print("New Selected Plan: ");
-        String sp = sc.nextLine();
-        System.out.print("New Instructor: ");
-        String instru = sc.nextLine();
         System.out.print("New Location: ");
         String loc = sc.nextLine();
         
-        String qry = "UPDATE tbl_member SET m_name = ?, m_payment = ?, m_dt = ?, m_selectedplan = ?, m_instru = ?, m_loc = ? WHERE m_id = ?";
-        config conf = new config();
-        conf.updateRecord(qry, name, pay, dt, sp, instru, loc, id);
+        String qry = "UPDATE tbl_member SET m_name = ?, m_dt = ?, m_loc = ? WHERE m_id = ?";
+        con.updateRecord(qry, name, dt, loc, id);
         System.out.println("Member updated successfully!");
     }
-         private void deleteMembers() {
-        Scanner sc = new Scanner(System.in);
-        config conf = new config();
+
+    public void deleteMembers() {
         System.out.print("Enter ID to Delete: ");
         int id = sc.nextInt();
-        sc.nextLine();  // Consume the newline character
+        sc.nextLine();  
         
-        while (conf.getSingleValue("SELECT m_id FROM tbl_member WHERE m_id = ?", id) == 0) {
-            System.out.println("Selected ID doesn't exist! ");
+        config con = new config();
+        while (con.getSingleValue("SELECT m_id FROM tbl_member WHERE m_id = ?", id) == 0) {
+            System.out.println("Selected ID doesn't exist!");
             System.out.print("Select member ID Again: ");
             id = sc.nextInt();
             sc.nextLine(); 
         }
         
         String qry = "DELETE FROM tbl_member WHERE m_id = ?";
-        config con = new config();
         con.deleteRecord(qry, id);
         System.out.println("Member deleted successfully!");
     }
+    
 }
