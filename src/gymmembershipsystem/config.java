@@ -17,7 +17,8 @@ public static Connection connectDB() {
             con = DriverManager.getConnection("jdbc:sqlite:GymMembership.db"); // Establish connection
             
         } catch (Exception e) {
-            System.out.println("Connection Failed: " + e);
+            System.out.println("Connection Failed: " + e.getMessage());
+            
         }
         return con;
     }
@@ -57,7 +58,10 @@ public static Connection connectDB() {
 
 
 }
-    // Dynamic view method to display records from any table
+    //---------------------------------------------------------------------------------------------------------------
+    //VIEW METHOD
+    //--------------------------------------------------------------------------------------------------------------- 
+   
     public void viewRecords(String sqlQuery, String[] columnHeaders, String[] columnNames) {
         // Check that columnHeaders and columnNames arrays are the same length
         if (columnHeaders.length != columnNames.length) {
@@ -206,6 +210,14 @@ public static Connection connectDB() {
     }
 
     void viewRecord(String qry, String[] columnHeaders, String[] columnNames, int memberId) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    boolean viewSpecificRecords(String query, int memberId, String[] columnHeaders, String[] columnNames) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    void viewRecord(int memberId) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

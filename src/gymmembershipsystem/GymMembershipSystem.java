@@ -2,10 +2,8 @@ package gymmembershipsystem;
 
 import java.util.Scanner;
 
-
 public class GymMembershipSystem {
 
-    
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
         boolean running = true;
@@ -33,14 +31,15 @@ public class GymMembershipSystem {
                     pm.pTransaction();
                     break;
                 case 3:
-                    
+                   
+                    ViewRecords vr = new ViewRecords();
+                    vr.recordsMenu(); 
                     break;
-                
                 case 4:
                     System.out.print("Exit Selected... Type 'yes' to confirm: ");
                     String resp = sc.nextLine();
                     if (resp.equalsIgnoreCase("yes")) {
-                        running = false;
+                        running = false; 
                     }
                     break;
                 default:
@@ -52,5 +51,4 @@ public class GymMembershipSystem {
         sc.close();
         System.out.println("Exiting Gym Membership System. Goodbye!");
     }
-    
 }

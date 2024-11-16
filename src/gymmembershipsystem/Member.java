@@ -1,5 +1,10 @@
 package gymmembershipsystem;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class Member {
@@ -24,10 +29,29 @@ public class Member {
             System.out.println("| 5.      EXIT         |");
             System.out.println(" ----------------------");
 
-            System.out.print("Enter selection: ");
-            int act = sc.nextInt();
-            sc.nextLine(); 
+            int act = -1;
+            boolean validInput = false;
 
+            // Input validation loop
+            while (!validInput) {
+                System.out.print("Enter selection: ");
+                try {
+                    act = sc.nextInt();  // Get the user's input
+                    sc.nextLine(); // Clear the buffer
+
+                    // Validate input is within the correct range (1-5)
+                    if (act >= 1 && act <= 5) {
+                        validInput = true;  // Valid input, exit loop
+                    } else {
+                        System.out.println("Invalid selection. Please enter a number between 1 and 5.");
+                    }
+                } catch (InputMismatchException e) {
+                    System.out.println("Invalid input. Please enter a valid number between 1 and 5.");
+                    sc.nextLine(); // Clear the invalid input from the buffer
+                }
+            }
+
+            // Process the action based on the user selection
             switch (act) {
                 case 1:
                     addMembers();
@@ -46,7 +70,6 @@ public class Member {
                     deleteMembers();
                     viewMembers();
                     break;
-                
                 case 5:
                     System.out.println("Exiting...");
                     return;
@@ -55,6 +78,7 @@ public class Member {
                     break;
             }
 
+            // Ask if the user wants to continue
             System.out.print("Do you want to continue? (yes/no): ");
             response = sc.nextLine();
 
@@ -125,5 +149,32 @@ public class Member {
         con.deleteRecord(qry, id);
         System.out.println("Member deleted successfully!");
     }
-    
+
+    public void viewMemberDetails(int memberId) {
+        String query = "SELECT * FROM tbl_member WHERE m_id = ?"; 
+        config con = new config();
+
+        try (Connection conn = con.connectDB();  
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+
+            stmt.setInt(1, memberId); 
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    System.out.println("---------------------------------------------------------------------------------------------");
+                    System.out.println("| ID                   | Name                 | Date and Time        | Location             |");
+                    System.out.println("---------------------------------------------------------------------------------------------");
+                    System.out.printf("| %-20d | %-20s | %-20s | %-20s |\n",
+                            rs.getInt("m_id"), 
+                            rs.getString("m_name"), 
+                            rs.getString("m_dt"), 
+                            rs.getString("m_loc"));
+                    System.out.println("---------------------------------------------------------------------------------------------");
+                } else {
+                    System.out.println("No member found with the given ID.");
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+    }
 }
