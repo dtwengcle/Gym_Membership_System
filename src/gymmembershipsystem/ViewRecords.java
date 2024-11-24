@@ -30,7 +30,7 @@ public class ViewRecords {
                     break;
                 case 2:
                     System.out.println("Exiting Records Panel...");
-                    return; // Exit the menu
+                    return; 
                 default:
                     System.out.println("Invalid choice. Please try again.");
             }
@@ -42,7 +42,7 @@ public class ViewRecords {
 
     private void viewGeneralRecords() {
         payments pay = new payments();
-        pay.viewPayments(); // Display all payment records
+        pay.viewPayments(); 
 
         Scanner sc = new Scanner(System.in);
         System.out.print("\nEnter Payment ID to view details (or 0 to exit): ");
@@ -57,10 +57,11 @@ public class ViewRecords {
     }
 
     private void viewPaymentsById(int paymentId) {
-        String qry = "SELECT p_id, m_name, m_dt, m_loc, p_payments, p_slcpln, p_instruc FROM tbl_payments " +
+        String qry = "SELECT p_id, m_name, m_dt, m_loc, p_payments, p_slcpln, p_instruc, p_expiration_date, p_renewal_date FROM tbl_payments " +
                      "LEFT JOIN tbl_member ON tbl_member.m_id = tbl_payments.m_id WHERE p_id = ?";
-        String[] columnHeaders = {"PID", "Member", "Date and Time", "Location", "Payments", "Selected Plan", "Instructor"};
-        String[] columnNames = {"p_id", "m_name", "m_dt", "m_loc", "p_payments", "p_slcpln", "p_instruc"};
+        
+        String[] columnHeaders = {"PID", "Member", "Date and Time", "Location", "Payments", "Selected Plan", "Instructor", "Expiration Date", "Renewal Date"};
+        String[] columnNames = {"p_id", "m_name", "m_dt", "m_loc", "p_payments", "p_slcpln", "p_instruc", "p_expiration_date", "p_renewal_date"};
 
         if (con.getSingleValue("SELECT p_id FROM tbl_payments WHERE p_id = ?", paymentId) == 0) {
             System.out.println("Error: Payment ID " + paymentId + " does not exist.");

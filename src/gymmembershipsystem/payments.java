@@ -1,12 +1,13 @@
 package gymmembershipsystem;
 
 import java.util.Scanner;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 public class payments {
 
     private final Scanner sc = new Scanner(System.in);
 
-    // Main method for handling payment transactions
     public void pTransaction() {
         String response;
         do {
@@ -78,7 +79,7 @@ public class payments {
         System.out.print("Enter Payment Amount: ");
         int payments = getValidatedIntegerInput();
 
-        System.out.print("Selected Plan: ");
+        System.out.print("Selected Plan (Monthly/Yearly): ");
         String slcpln = sc.nextLine().trim(); 
 
         System.out.print("Instructor: ");
@@ -89,8 +90,12 @@ public class payments {
             return;
         }
 
-        String paymentsqry = "INSERT INTO tbl_payments (m_id, p_payments, p_slcpln, p_instruc) VALUES (?, ?, ?, ?)";
-        con.addRecord(paymentsqry, mid, payments, slcpln, instruc);
+        
+        String expirationDate = calculateExpirationDate(slcpln);
+        String renewalDate = calculateRenewalDate(expirationDate);
+
+        String paymentsqry = "INSERT INTO tbl_payments (m_id, p_payments, p_slcpln, p_instruc, p_expiration_date, p_renewal_date) VALUES (?, ?, ?, ?, ?, ?)";
+        con.addRecord(paymentsqry, mid, payments, slcpln, instruc, expirationDate, renewalDate);
         System.out.println("Payment added successfully!");
     }
 
@@ -126,8 +131,12 @@ public class payments {
         System.out.print("Enter new Instructor: ");
         String newInstructor = sc.nextLine();
 
-        String updateSql = "UPDATE tbl_payments SET p_payments = ?, p_slcpln = ?, p_instruc = ? WHERE p_id = ?";
-        con.updateRecord(updateSql, newAmount, newPlan, newInstructor, paymentId);
+        
+        String newExpirationDate = calculateExpirationDate(newPlan);
+        String newRenewalDate = calculateRenewalDate(newExpirationDate);
+
+        String updateSql = "UPDATE tbl_payments SET p_payments = ?, p_slcpln = ?, p_instruc = ?, p_expiration_date = ?, p_ renewal_date = ? WHERE p_id = ?";
+        con.updateRecord(updateSql, newAmount, newPlan, newInstructor, newExpirationDate, newRenewalDate, paymentId);
 
         System.out.println("Payment updated successfully!");
     }
@@ -150,6 +159,37 @@ public class payments {
         System.out.println("Payment deleted successfully!");
     }
     
+    
+    private String calculateExpirationDate(String plan) {
+        Calendar cal = Calendar.getInstance();
+        
+        
+        if (plan.equalsIgnoreCase("monthly")) {
+            cal.add(Calendar.MONTH, 1);
+        } else if (plan.equalsIgnoreCase("yearly")) {
+            cal.add(Calendar.YEAR, 1);
+        }
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        return sdf.format(cal.getTime());
+    }
+
+   
+    private String calculateRenewalDate(String expirationDate) {
+        Calendar cal = Calendar.getInstance();
+        
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            cal.setTime(sdf.parse(expirationDate));
+            cal.add(Calendar.DATE, 7); 
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        return sdf.format(cal.getTime());
+    }
 
     private int getValidatedIntegerInput() {
         while (true) {

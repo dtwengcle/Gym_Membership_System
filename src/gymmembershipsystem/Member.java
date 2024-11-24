@@ -32,26 +32,23 @@ public class Member {
             int act = -1;
             boolean validInput = false;
 
-            // Input validation loop
             while (!validInput) {
                 System.out.print("Enter selection: ");
                 try {
-                    act = sc.nextInt();  // Get the user's input
-                    sc.nextLine(); // Clear the buffer
+                    act = sc.nextInt(); 
+                    sc.nextLine(); 
 
-                    // Validate input is within the correct range (1-5)
                     if (act >= 1 && act <= 5) {
-                        validInput = true;  // Valid input, exit loop
+                        validInput = true; 
                     } else {
                         System.out.println("Invalid selection. Please enter a number between 1 and 5.");
                     }
                 } catch (InputMismatchException e) {
                     System.out.println("Invalid input. Please enter a valid number between 1 and 5.");
-                    sc.nextLine(); // Clear the invalid input from the buffer
+                    sc.nextLine(); 
                 }
             }
 
-            // Process the action based on the user selection
             switch (act) {
                 case 1:
                     addMembers();
@@ -78,7 +75,6 @@ public class Member {
                     break;
             }
 
-            // Ask if the user wants to continue
             System.out.print("Do you want to continue? (yes/no): ");
             response = sc.nextLine();
 
@@ -88,7 +84,7 @@ public class Member {
     public void addMembers() {
         System.out.print("Name: ");
         String name = sc.nextLine();
-        System.out.print("Date and Time : ");
+        System.out.print("Date (YYYY-MM-DD): ");
         String date = sc.nextLine();
         System.out.print("Location: ");
         String loc = sc.nextLine();
@@ -122,7 +118,7 @@ public class Member {
 
         System.out.print("New Name: ");
         String name = sc.nextLine();
-        System.out.print("New Date & Time: ");
+        System.out.print("New Date (YYYY-MM-DD): ");
         String dt = sc.nextLine();
         System.out.print("New Location: ");
         String loc = sc.nextLine();

@@ -76,11 +76,11 @@ public static Connection connectDB() {
 
             // Print the headers dynamically
             StringBuilder headerLine = new StringBuilder();
-            headerLine.append("----------------------------------------------------------------------------------------------------------------------------------------------------------------\n| ");
+            headerLine.append("------------------------------------------------------------------------------------------------------------------------------------------------------------------\n| ");
             for (String header : columnHeaders) {
                 headerLine.append(String.format("%-20s | ", header)); // Adjust formatting as needed
             }
-            headerLine.append("\n----------------------------------------------------------------------------------------------------------------------------------------------------------------");
+            headerLine.append("\n------------------------------------------------------------------------------------------------------------------------------------------------------------------");
 
             System.out.println(headerLine.toString());
 
@@ -93,7 +93,7 @@ public static Connection connectDB() {
                 }
                 System.out.println(row.toString());
             }
-            System.out.println("----------------------------------------------------------------------------------------------------------------------------------------------------------------");
+            System.out.println("------------------------------------------------------------------------------------------------------------------------------------------------------------------");
 
         } catch (SQLException e) {
             System.out.println("Error retrieving records: " + e.getMessage());
@@ -211,33 +211,28 @@ public static Connection connectDB() {
     }
 
     public void viewSingleRecord(String qry, String[] headers, String[] columns, int id) {
-    try (Connection conn = connectDB()) { // Use connectDB to get the connection
-        // Prepare the query with the ID
+    try (Connection conn = connectDB()) { 
         PreparedStatement stmt = conn.prepareStatement(qry);
-        stmt.setInt(1, id); // Set the ID parameter in the query
-        
-        ResultSet rs = stmt.executeQuery(); // Execute the query
-        
-        // Check if a result is returned
+        stmt.setInt(1, id); 
+        ResultSet rs = stmt.executeQuery(); 
+       
         if (rs.next()) {
-            // Print the box for headers
             StringBuilder headerLine = new StringBuilder();
-            headerLine.append("+----------------------+----------------------+----------------------+----------------------+----------------------+----------------------+----------------------+\n");
+            headerLine.append("+----------------------+----------------------+----------------------+----------------------+----------------------+----------------------+----------------------+----------------------+----------------------\n");
             headerLine.append("| ");
             for (String header : headers) {
-                headerLine.append(String.format("%-20s | ", header)); // Adjust formatting
+                headerLine.append(String.format("%-20s | ", header)); 
             }
-            headerLine.append("\n+----------------------+----------------------+----------------------+----------------------+----------------------+----------------------+----------------------+");
+            headerLine.append("\n+----------------------+----------------------+----------------------+----------------------+----------------------+----------------------+----------------------+----------------------+----------------------");
 
             System.out.println(headerLine.toString());
 
-            // Print the box for the data
             StringBuilder dataLine = new StringBuilder("| ");
             for (String column : columns) {
                 String value = rs.getString(column);
-                dataLine.append(String.format("%-20s | ", value != null ? value : "")); // Adjust formatting
+                dataLine.append(String.format("%-20s | ", value != null ? value : ""));
             }
-            dataLine.append("\n+----------------------+----------------------+----------------------+----------------------+----------------------+----------------------+----------------------+");
+            dataLine.append("\n+----------------------+----------------------+----------------------+----------------------+----------------------+----------------------+----------------------+----------------------+----------------------");
 
             System.out.println(dataLine.toString());
         } else {
@@ -247,6 +242,7 @@ public static Connection connectDB() {
     } catch (SQLException e) {
         System.out.println("Error fetching record: " + e.getMessage());
     }
+    }
 }
 
-}
+
