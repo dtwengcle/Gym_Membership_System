@@ -5,6 +5,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import static org.sqlite.SQLiteConfig.Pragma.PASSWORD;
 
 public class config {
       
@@ -209,16 +210,43 @@ public static Connection connectDB() {
         return result;
     }
 
-    void viewRecord(String qry, String[] columnHeaders, String[] columnNames, int memberId) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+    public void viewSingleRecord(String qry, String[] headers, String[] columns, int id) {
+    try (Connection conn = connectDB()) { // Use connectDB to get the connection
+        // Prepare the query with the ID
+        PreparedStatement stmt = conn.prepareStatement(qry);
+        stmt.setInt(1, id); // Set the ID parameter in the query
+        
+        ResultSet rs = stmt.executeQuery(); // Execute the query
+        
+        // Check if a result is returned
+        if (rs.next()) {
+            // Print the box for headers
+            StringBuilder headerLine = new StringBuilder();
+            headerLine.append("+----------------------+----------------------+----------------------+----------------------+----------------------+----------------------+----------------------+\n");
+            headerLine.append("| ");
+            for (String header : headers) {
+                headerLine.append(String.format("%-20s | ", header)); // Adjust formatting
+            }
+            headerLine.append("\n+----------------------+----------------------+----------------------+----------------------+----------------------+----------------------+----------------------+");
 
-    boolean viewSpecificRecords(String query, int memberId, String[] columnHeaders, String[] columnNames) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+            System.out.println(headerLine.toString());
 
-    void viewRecord(int memberId) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            // Print the box for the data
+            StringBuilder dataLine = new StringBuilder("| ");
+            for (String column : columns) {
+                String value = rs.getString(column);
+                dataLine.append(String.format("%-20s | ", value != null ? value : "")); // Adjust formatting
+            }
+            dataLine.append("\n+----------------------+----------------------+----------------------+----------------------+----------------------+----------------------+----------------------+");
+
+            System.out.println(dataLine.toString());
+        } else {
+            System.out.println("Record not found for ID: " + id);
+        }
+
+    } catch (SQLException e) {
+        System.out.println("Error fetching record: " + e.getMessage());
     }
+}
 
 }

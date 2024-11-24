@@ -150,31 +150,4 @@ public class Member {
         System.out.println("Member deleted successfully!");
     }
 
-    public void viewMemberDetails(int memberId) {
-        String query = "SELECT * FROM tbl_member WHERE m_id = ?"; 
-        config con = new config();
-
-        try (Connection conn = con.connectDB();  
-             PreparedStatement stmt = conn.prepareStatement(query)) {
-
-            stmt.setInt(1, memberId); 
-            try (ResultSet rs = stmt.executeQuery()) {
-                if (rs.next()) {
-                    System.out.println("---------------------------------------------------------------------------------------------");
-                    System.out.println("| ID                   | Name                 | Date and Time        | Location             |");
-                    System.out.println("---------------------------------------------------------------------------------------------");
-                    System.out.printf("| %-20d | %-20s | %-20s | %-20s |\n",
-                            rs.getInt("m_id"), 
-                            rs.getString("m_name"), 
-                            rs.getString("m_dt"), 
-                            rs.getString("m_loc"));
-                    System.out.println("---------------------------------------------------------------------------------------------");
-                } else {
-                    System.out.println("No member found with the given ID.");
-                }
-            }
-        } catch (SQLException e) {
-            System.out.println("Error: " + e.getMessage());
-        }
-    }
 }
