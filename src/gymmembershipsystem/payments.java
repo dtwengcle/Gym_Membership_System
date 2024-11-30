@@ -5,7 +5,8 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 public class payments {
-
+    
+    config conf = new config();
     private final Scanner sc = new Scanner(System.in);
 
     public void pTransaction() {
@@ -26,7 +27,7 @@ public class payments {
             System.out.println(" --------------------------------");
 
             System.out.print("Enter selection: ");
-            int act = getValidatedIntegerInput();
+            int act = conf.validateInt();
 
             
             switch (act) {
@@ -65,7 +66,7 @@ public class payments {
         mem.viewMembers(); 
 
         System.out.print("Enter the selected ID of the Member: ");
-        int mid = getValidatedIntegerInput(); 
+        int mid = conf.validateInt();
 
         
         String sql = "SELECT m_id FROM tbl_member WHERE m_id = ?";
@@ -74,13 +75,16 @@ public class payments {
             mid = getValidatedIntegerInput(); 
         }
 
-        sc.nextLine(); 
-
         System.out.print("Enter Payment Amount: ");
-        int payments = getValidatedIntegerInput();
+        int payments = conf.validateInt();
 
         System.out.print("Selected Plan (Monthly/Yearly): ");
-        String slcpln = sc.nextLine().trim(); 
+        String slcpln = sc.nextLine();
+        
+        while(!(slcpln.contains("Monthly") || slcpln.contains("Yearly"))){
+            System.out.print("Invalid plan, try again: ");
+            slcpln = sc.nextLine();
+        }
 
         System.out.print("Instructor: ");
         String instruc = sc.nextLine().trim(); 
@@ -127,6 +131,11 @@ public class payments {
 
         System.out.print("Enter new Selected Plan: ");
         String newPlan = sc.nextLine();
+        
+        while(!(newPlan.contains("Monthly") || newPlan.contains("Yearly"))){
+            System.out.print("Invalid plan, try again: ");
+            newPlan = sc.nextLine();
+        }
 
         System.out.print("Enter new Instructor: ");
         String newInstructor = sc.nextLine();

@@ -82,10 +82,18 @@ public class Member {
     }
 
     public void addMembers() {
+        config conf = new config();
+        
         System.out.print("Name: ");
         String name = sc.nextLine();
         System.out.print("Date (YYYY-MM-DD): ");
+        
         String date = sc.nextLine();
+        
+        while(!conf.dateValidate(date)){
+            date = sc.nextLine();
+        }
+        
         System.out.print("Location: ");
         String loc = sc.nextLine();
 

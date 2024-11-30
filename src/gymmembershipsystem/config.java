@@ -5,10 +5,17 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import static org.sqlite.SQLiteConfig.Pragma.PASSWORD;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+import java.time.temporal.ChronoUnit;
+import java.util.InputMismatchException;
+import java.util.Scanner;
 
 public class config {
-      
+    
+    LocalDate date = LocalDate.now();  
+    
     
     //Connection Method to SQLITE
 public static Connection connectDB() {
@@ -242,6 +249,41 @@ public static Connection connectDB() {
     } catch (SQLException e) {
         System.out.println("Error fetching record: " + e.getMessage());
     }
+    }
+    
+    public boolean dateValidate(String getDate){
+        DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        try{
+            LocalDate.parse(getDate, format);
+            
+            long remain = ChronoUnit.DAYS.between(date, LocalDate.parse(getDate));
+            String remDays = String.valueOf(remain);
+
+            if(Integer.parseInt(remDays) < 0){
+                System.out.print("Error: Due date must not be from the past, try again: ");
+                return false;
+            }
+            return true;
+        } catch(DateTimeParseException e){
+            System.out.print("Error: Date is incorrect, try again: ");
+        }
+        return false;
+    }
+    
+    public int validateInt() {
+        Scanner sc = new Scanner(System.in);
+        int getNum;
+        
+        while(true) {
+            try {
+                    getNum = sc.nextInt();
+                    break;
+            } catch(InputMismatchException e) {
+                System.out.print("Invalid Input: Must only be a number, try again: ");
+                sc.next();
+            }
+        }
+        return getNum;
     }
 }
 
